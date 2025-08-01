@@ -86,11 +86,43 @@ export async function updateUser(req, res) {
         logger.error(error, 'Failed to update user');
         res.status(500).json({ message: 'Server error' });
     }
-
-    
-
 }
 
 export async function deleteUser(req, res) {
     const { userId } = req.params;
+    if (!userId) {
+        logger.warn('User ID is required');
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    try {
+        const file = await fs.readFile(USERS_FILE, 'utf-8');
+        const users = JSON.parse(file);
+
+        const userIndex = users.findIndex((_, idx) => idx === Number(userId));
+        if (userIndex === -1) {
+            logger.warn(`User with Id ${userId} not found`);
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        // Remove the user from the array and return it for logging and response
+        const deletedUser = users.splice(userIndex, 1)[0];
+
+        // Overwrite the file with the updated array
+        await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
+
+        logger.info({ deletedUser }, "User deleted successfuly");
+
+        return res.status(200).json({
+            message: "User deleted successfully",
+            data: deletedUser
+        })
+    } catch (error) {
+        logger.error(error, "Failed to delete user");
+        return res.status(500).json({
+            message: "Server error"
+        })
+    }
 }
