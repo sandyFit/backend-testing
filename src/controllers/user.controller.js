@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
-import { logger } from '../logger';
+import { logger } from '../logger.js';
 
-const USERS_FILE = './data/users.json';
+const USERS_FILE = './src/data/users.json'; 
 
 export async function getUsers(req, res) {
     try {
@@ -33,7 +33,7 @@ export async function createUser(req, res) {
 
         res.status(201).json({
             message: 'User saved'
-        })
+        });
 
     } catch (error) {
         logger.error(err, 'Failed to save user');
@@ -43,10 +43,54 @@ export async function createUser(req, res) {
 
 export async function updateUser(req, res) {
     const { userId } = req.params;
+    const { name, address, age } = req.body;
+
     if (!userId) {
-        logger.warn('User id is required');
+        logger.warn('User ID is required');
+        return res.status(400).json({ message: 'User ID is required' });
+    }
+
+    try {
+        const file = await fs.readFile(USERS_FILE, 'utf-8');
+        const users = JSON.parse(file);
+
+        // Find the position (index) of the user in the users array
+        // based on the userId provided in the request URL.
+        const userIndex = users.findIndex((_, idx) => idx === Number(userId));
+        if (userIndex === -1) {
+            logger.warn(`User with Id ${userId} not found`);
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const updatedUser = {
+            ...users[userIndex],
+            ...(name && { name }),
+            ...(address && { address }),
+            ...(age && {age}),
+        }
+
+        users[userIndex] = updatedUser;
+
+        await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2));
+
+        logger.info({ userId, updatedUser }, 'User updated');
+
+        res.status(200).json({
+            message: 'User updated',
+            data: updatedUser
+        })
+
+    } catch (error) {
+        logger.error(error, 'Failed to update user');
+        res.status(500).json({ message: 'Server error' });
     }
 
     
 
+}
+
+export async function deleteUser(req, res) {
+    const { userId } = req.params;
 }

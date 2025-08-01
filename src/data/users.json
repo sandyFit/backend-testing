@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Lisa Simpson",
+    "address": "742 Evergreen Terrace",
+    "age": 8
+  },
+  {
+    "name": "John Updated",
+    "address": "123 Main Street",
+    "age": 31
+  },
+  {
+    "name": "Maria Garcia",
+    "address": "Calle 45 #22-10, Bogotá",
+    "age": 27
+  },
+  {
+    "name": "Aiko Tanaka",
+    "address": "5-7-3 Shibuya, Tokyo",
+    "age": 35
+  },
+  {
+    "name": "Elijah Mbatha",
+    "address": "14 Vilakazi St, Soweto, Johannesburg",
+    "age": 42
+  }
+]
