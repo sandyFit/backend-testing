@@ -1,25 +1,15 @@
 import express from "express";
-import { logger } from "../logger";
+import {getUsers, createUser, u} from '../controllers/user.controller.js';
 
 const router = express.Router();
 
+// 👇 Register POST /users route
+router.post('/users', getUsers);
 
-const users = [];
-router.post('/users', (req, res) => {
-    try {
-        const { name, address, age } = req.body;
+// 👇 Fetch GET /users 
+router.get('/users', createUser);
 
-        users.push({ name, address, age });
+// Fetch GET /users/id
+router.get('/users', )
 
-        return res.status(201).json({
-            message: 'User created successfully',
-        })
-    } catch (error) {
-        logger.error(`Error creating a new user ${error}`)
-    }
-
-});
-
-router.get('/users', (req, res) => {
-    
-})
+export default router;
