@@ -5,11 +5,6 @@
     "age": 8
   },
   {
-    "name": "John Updated",
-    "address": "123 Main Street",
-    "age": 31
-  },
-  {
     "name": "Maria Garcia",
     "address": "Calle 45 #22-10, Bogotá",
     "age": 27
@@ -23,5 +18,10 @@
     "name": "Elijah Mbatha",
     "address": "14 Vilakazi St, Soweto, Johannesburg",
     "age": 42
+  },
+  {
+    "name": "John Doe",
+    "address": "Avenida Siempreviva",
+    "age": "20"
   }
 ]

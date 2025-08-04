@@ -21,7 +21,7 @@ export async function getUsers(req, res) {
 export async function createUser(req, res) {
     const { name, address, age } = req.body;
     try {
-        const file = fs.readFile(USERS_FILE, 'utf-8');
+        const file = await fs.readFile(USERS_FILE, 'utf-8');
         const users = JSON.parse(file);
 
         const newUser = { name, address, age };
@@ -36,7 +36,7 @@ export async function createUser(req, res) {
         });
 
     } catch (error) {
-        logger.error(err, 'Failed to save user');
+        logger.error(error, 'Failed to save user');
         res.status(500).json({ message: 'Server error' });
     }
 }
